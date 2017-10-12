@@ -48,6 +48,10 @@ RUN mkdir $ANDROID_HOME/licenses
 RUN echo 8933bad161af4178b1185d1a37fbf41ea5269c55 > $ANDROID_HOME/licenses/android-sdk-license
 RUN echo 84831b9409646a918e30573bab4c9c91346d8abd > $ANDROID_HOME/licenses/android-sdk-preview-license
 
+# copy tools folder
+COPY tools /opt/tools
+ENV PATH ${PATH}:/opt/tools
+
 # sdk
 RUN echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "tools" \
     && echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "platform-tools" \
