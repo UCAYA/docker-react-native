@@ -3,7 +3,7 @@ FROM openjdk:8
 # nodejs, zip, to unzip things
 RUN apt-get update && \
     apt-get -y install zip expect && \
-    curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
+    curl -sL https://deb.nodesource.com/setup_9.x | bash - && \
     apt-get install -y nodejs && \
     rm -rf /var/lib/apt/lists/* && \
 	apt-get autoremove -y && \
