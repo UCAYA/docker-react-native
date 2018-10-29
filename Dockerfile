@@ -3,7 +3,7 @@ FROM openjdk:8
 # nodejs, zip, to unzip things
 RUN apt-get update && \
     apt-get -y install zip expect && \
-    curl -sL https://deb.nodesource.com/setup_9.x | bash - && \
+    curl -sL https://deb.nodesource.com/setup_11.x | bash - && \
     apt-get install -y nodejs && \
     rm -rf /var/lib/apt/lists/* && \
 	apt-get autoremove -y && \
@@ -60,10 +60,13 @@ RUN echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "tools" \
     && echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "build-tools;25.0.3" \
     && echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "build-tools;26.0.2" \
     && echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "build-tools;27.0.3" \
+    && echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "build-tools;28.0.2" \
+    && echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "build-tools;28.0.3" \
     && echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "platforms;android-23" \
     && echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "platforms;android-25" \
     && echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "platforms;android-26" \
     && echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "platforms;android-27" \
+    && echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "platforms;android-28" \
     && echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "extras;android;m2repository" \
     && echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "extras;google;m2repository" \
     && echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "extras;google;google_play_services" \
