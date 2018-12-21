@@ -1,5 +1,8 @@
 FROM openjdk:8
 
+ENV ANDROID_NDK_HOME /opt/android-ndk
+ENV ANDROID_NDK_VERSION r18
+
 # nodejs, zip, to unzip things
 RUN apt-get update && \
     apt-get -y install zip expect && \
@@ -24,6 +27,22 @@ RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
     rm -rf /var/lib/apt/lists/* && \
 	apt-get autoremove -y && \
 	apt-get clean
+	
+
+# ------------------------------------------------------
+# --- Android NDK
+
+# download
+RUN mkdir /opt/android-ndk-tmp && \
+    cd /opt/android-ndk-tmp && \
+    wget -q https://dl.google.com/android/repository/android-ndk-${ANDROID_NDK_VERSION}-linux-x86_64.zip && \
+# uncompress
+    unzip -q android-ndk-${ANDROID_NDK_VERSION}-linux-x86_64.zip && \
+# move to its final location
+    mv ./android-ndk-${ANDROID_NDK_VERSION} ${ANDROID_NDK_HOME} && \
+# remove temp dir
+    cd ${ANDROID_NDK_HOME} && \
+    rm -rf /opt/android-ndk-tmp
 
 ENV GRADLE_VERSION 3.3
 ENV GRADLE_SDK_URL https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip
@@ -31,7 +50,7 @@ RUN curl -sSL "${GRADLE_SDK_URL}" -o gradle-${GRADLE_VERSION}-bin.zip  \
     && unzip gradle-${GRADLE_VERSION}-bin.zip -d /usr/local  \
     && rm -rf gradle-${GRADLE_VERSION}-bin.zip
 ENV GRADLE_HOME /usr/local/gradle-${GRADLE_VERSION}
-ENV PATH ${GRADLE_HOME}/bin:$PATH
+ENV PATH ${GRADLE_HOME}/bin:$PATH:${ANDROID_NDK_HOME}
 
 # Setup environment
 ENV ANDROID_HOME /opt/android-sdk-linux
