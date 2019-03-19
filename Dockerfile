@@ -49,7 +49,7 @@ RUN apt-get update && apt-get install -y build-essential \
 #     cd ${ANDROID_NDK_HOME} && \
 #     rm -rf /opt/android-ndk-tmp
 
-ENV GRADLE_VERSION 5.2.1
+ENV GRADLE_VERSION 4.4
 ENV GRADLE_SDK_URL https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip
 RUN curl -sSL "${GRADLE_SDK_URL}" -o gradle-${GRADLE_VERSION}-bin.zip  \
     && unzip gradle-${GRADLE_VERSION}-bin.zip -d /usr/local  \
