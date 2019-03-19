@@ -1,8 +1,5 @@
 FROM openjdk:8
 
-ENV ANDROID_NDK_HOME /opt/android-ndk
-ENV ANDROID_NDK_VERSION r18
-
 # nodejs, zip, to unzip things
 RUN apt-get update && \
     apt-get -y install zip expect && \
@@ -58,7 +55,7 @@ RUN curl -sSL "${GRADLE_SDK_URL}" -o gradle-${GRADLE_VERSION}-bin.zip  \
     && unzip gradle-${GRADLE_VERSION}-bin.zip -d /usr/local  \
     && rm -rf gradle-${GRADLE_VERSION}-bin.zip
 ENV GRADLE_HOME /usr/local/gradle-${GRADLE_VERSION}
-ENV PATH ${GRADLE_HOME}/bin:$PATH:${ANDROID_NDK_HOME}
+ENV PATH ${GRADLE_HOME}/bin:$PATH
 
 # Setup environment
 ENV ANDROID_HOME /opt/android-sdk-linux
