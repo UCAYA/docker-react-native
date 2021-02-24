@@ -24,7 +24,7 @@ RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
     rm -rf /var/lib/apt/lists/* && \
 	apt-get autoremove -y && \
 	apt-get clean
-	
+
 # install build-essential
 RUN apt-get update && apt-get install -y build-essential \
     cmake \
@@ -63,7 +63,7 @@ ENV PATH ${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
 
 # android sdk tools
 RUN cd /opt \
-    && wget -q https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip -O tools.zip \
+    && wget -q https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip -O tools.zip \
     && mkdir -p ${ANDROID_HOME} \
     && unzip tools.zip -d ${ANDROID_HOME} \
     && rm -f tools.zip
@@ -88,11 +88,14 @@ RUN echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "tools" \
     && echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "build-tools;27.0.3" \
     && echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "build-tools;28.0.2" \
     && echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "build-tools;28.0.3" \
+    && echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "build-tools;29.0.2" \
     && echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "platforms;android-23" \
     && echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "platforms;android-25" \
     && echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "platforms;android-26" \
     && echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "platforms;android-27" \
     && echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "platforms;android-28" \
+    && echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "platforms;android-29" \
+    && echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "platforms;android-30" \
     && echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "extras;android;m2repository" \
     && echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "extras;google;m2repository" \
     && echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "extras;google;google_play_services" \
