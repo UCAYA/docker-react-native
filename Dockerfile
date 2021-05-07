@@ -1,9 +1,9 @@
-FROM openjdk:8
+FROM openjdk:11.0.11-jdk
 
 # nodejs, zip, to unzip things
 RUN apt-get update && \
     apt-get -y install zip expect && \
-    curl -sL https://deb.nodesource.com/setup_11.x | bash - && \
+    curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
     apt-get install -y nodejs && \
     rm -rf /var/lib/apt/lists/* && \
 	apt-get autoremove -y && \
@@ -49,7 +49,7 @@ RUN apt-get update && apt-get install -y build-essential \
 #     cd ${ANDROID_NDK_HOME} && \
 #     rm -rf /opt/android-ndk-tmp
 
-ENV GRADLE_VERSION 4.4
+ENV GRADLE_VERSION 6.7
 ENV GRADLE_SDK_URL https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip
 RUN curl -sSL "${GRADLE_SDK_URL}" -o gradle-${GRADLE_VERSION}-bin.zip  \
     && unzip gradle-${GRADLE_VERSION}-bin.zip -d /usr/local  \
@@ -63,10 +63,12 @@ ENV PATH ${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
 
 # android sdk tools
 RUN cd /opt \
-    && wget -q https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip -O tools.zip \
+    && wget -q https://dl.google.com/android/repository/commandlinetools-linux-7302050_latest.zip -O tools.zip \
     && mkdir -p ${ANDROID_HOME} \
-    && unzip tools.zip -d ${ANDROID_HOME} \
-    && rm -f tools.zip
+    && unzip tools.zip  \
+    && rm -f tools.zip \
+    && mkdir -p ${ANDROID_HOME}/cmdline-tools \
+    && mv cmdline-tools ${ANDROID_HOME}/cmdline-tools/latest
 
 RUN mkdir $ANDROID_HOME/licenses
 RUN echo 8933bad161af4178b1185d1a37fbf41ea5269c55 >> $ANDROID_HOME/licenses/android-sdk-license
@@ -79,30 +81,32 @@ COPY tools /opt/tools
 ENV PATH ${PATH}:/opt/tools
 
 # sdk
-RUN echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "tools" \
-    && echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "platform-tools" \
-    && echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "build-tools;23.0.1" \
-    && echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "build-tools;23.0.3" \
-    && echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "build-tools;25.0.3" \
-    && echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "build-tools;26.0.2" \
-    && echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "build-tools;27.0.3" \
-    && echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "build-tools;28.0.2" \
-    && echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "build-tools;28.0.3" \
-    && echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "build-tools;29.0.2" \
-    && echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "platforms;android-23" \
-    && echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "platforms;android-25" \
-    && echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "platforms;android-26" \
-    && echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "platforms;android-27" \
-    && echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "platforms;android-28" \
-    && echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "platforms;android-29" \
-    && echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "platforms;android-30" \
-    && echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "extras;android;m2repository" \
-    && echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "extras;google;m2repository" \
-    && echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "extras;google;google_play_services" \
-    && echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "ndk-bundle" \
-    && echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "cmake;3.6.4111459" \
-    && echo "y" | $ANDROID_HOME/tools/bin/sdkmanager --channel=3 --channel=1 "cmake;3.10.2.4988404" \
-    && echo "y" | $ANDROID_HOME/tools/bin/sdkmanager "lldb;3.1" \
-    && echo "y" | $ANDROID_HOME/tools/bin/sdkmanager --licenses
+RUN echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "tools"
+RUN echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platform-tools"
+RUN echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "build-tools;26.0.2"
+RUN echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "build-tools;27.0.3"
+RUN echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "build-tools;28.0.2"
+RUN echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "build-tools;28.0.3"
+RUN echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "build-tools;29.0.2"
+RUN echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platforms;android-23"
+RUN echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platforms;android-28"
+RUN echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platforms;android-29"
+RUN echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platforms;android-30"
+RUN echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "extras;android;m2repository"
+RUN echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "extras;google;m2repository"
+RUN echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "extras;google;google_play_services"
+RUN echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "ndk-bundle"
+RUN echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "cmake;3.6.4111459"
+RUN echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --channel=3 --channel=1 "cmake;3.10.2.4988404"
+RUN echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
+
+RUN \
+  wget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh \
+  && chmod +x dotnet-install.sh \
+  && mkdir -p /usr/share/dotnet \
+  && ./dotnet-install.sh --channel 3.1 --install-dir /usr/share/dotnet \
+  && ./dotnet-install.sh --channel 5.0 --install-dir /usr/share/dotnet
+
+ENV PATH /usr/share/dotnet:$PATH
 
 WORKDIR /root
