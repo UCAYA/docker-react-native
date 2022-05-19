@@ -3,7 +3,7 @@ FROM openjdk:11.0.11-jdk
 # nodejs, zip, to unzip things
 RUN apt-get update && \
     apt-get -y install zip expect && \
-    curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
+    curl -sL https://deb.nodesource.com/setup_16.x | bash - && \
     apt-get install -y nodejs && \
     rm -rf /var/lib/apt/lists/* && \
 	apt-get autoremove -y && \
@@ -105,7 +105,8 @@ RUN \
   && chmod +x dotnet-install.sh \
   && mkdir -p /usr/share/dotnet \
   && ./dotnet-install.sh --channel 3.1 --install-dir /usr/share/dotnet \
-  && ./dotnet-install.sh --channel 5.0 --install-dir /usr/share/dotnet
+  && ./dotnet-install.sh --channel 5.0 --install-dir /usr/share/dotnet \
+  && ./dotnet-install.sh --channel 6.0 --install-dir /usr/share/dotnet
 
 ENV PATH /usr/share/dotnet:$PATH
 
