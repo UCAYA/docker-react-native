@@ -1,4 +1,4 @@
-FROM openjdk:11.0.11-jdk
+FROM openjdk:21-jdk-bullseye
 
 # nodejs, zip, to unzip things
 RUN apt-get update && \
